@@ -27,6 +27,17 @@ VALIDATE(){
     fi
 }
 
+# useradd roboshop  &>>$LOGFILE
+
+id roboshop &>>$LOGFILE
+if [ $? -ne 0 ]; then
+  useradd roboshop &>>$LOGFILE
+  VALIDATE $? "Creating roboshop user"
+else
+  echo -e "roboshop user already exists ... $Y SKIPPING $N"
+fi
+
+
 yum install maven -y  &>>$LOGFILE
 VALIDATE $? "Installing Maven"
 
@@ -71,6 +82,7 @@ VALIDATE $? "start shipping service"
 
 yum install mysql -y  &>>$LOGFILE
 VALIDATE $? "instalng mysql client"
+
 
 mysql -h mysql.janadevops.fun -uroot -pRoboShop@1 < /app/schema/shipping.sql  &>>$LOGFILE
 VALIDATE $? "Loaded countries and cities info"
