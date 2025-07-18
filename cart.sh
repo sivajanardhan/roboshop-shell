@@ -35,12 +35,27 @@ yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "installing node js"
 
 
-useradd roboshop &>>$LOGFILE
-VALIDATE $? " creating roboshop user"
+
+# Add user roboshop if not present
+id roboshop &>>$LOGFILE
+if [ $? -ne 0 ]; then
+    useradd roboshop &>>$LOGFILE
+    VALIDATE $? "Creating roboshop user"
+else
+    echo -e "User roboshop already exists ... $Y SKIPPING $N"
+fi
 
 
-mkdir /app &>>$LOGFILE
-VALIDATE $? " creting app directory"
+
+# Create /app directory if it doesn't exist
+
+
+if [ ! -d /app ]; then
+    mkdir /app &>>$LOGFILE
+    VALIDATE $? "Creating /app directory"
+else
+    echo -e "/app already exists ... $Y SKIPPING $N"
+fi
 
 
 curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>>$LOGFILE
