@@ -44,5 +44,45 @@ VALIDATE $? "moving to directory"
 unzip /tmp/shipping.zip    &>>$LOGFILE
 VALIDATE $? "unzip shipping"
 
+mvn clean package &>>$LOGFILE
+VALIDATE $? "packaging shipping app"
+
+
+mv target/shipping-1.0.jar shipping.jar  &>>$LOGFILE
+VALIDATE $? "renaming shipping jar"
+
+cp /home/centos/roboshop-shell/shipping.service /etc/systemd/system/shipping.service &>>$LOGFILE
+VALIDATE $? "copying shipping service"
+
+
+systemctl daemon-reload &>>$LOGFILE
+VALIDATE $? "daemon-reload"
+
+systemctl enable shipping &>>$LOGFILE
+VALIDATE $? "enable shipping"
+
+systemctl start shipping &>>$LOGFILE
+VALIDATE $? "start shipping service"
+
+yum install mysql -y  &>>$LOGFILE
+VALIDATE $? "instalng mysql client"
+
+mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql  &>>$LOGFILE
+VALIDATE $? "Loaded countries and cities info"
+
+
+systemctl restart shipping &>>$LOGFILE
+VALIDATE $? " restart shipping"
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -64,11 +64,9 @@ VALIDATE $? "starting catalogue"
 cp /home/centos/roboshop-shell/mongo.repo  /etc/yum.repos.d/mongo.repo &>>$LOGFILE
 
 yum install mongodb-org-shell -y &>>$LOGFILE
-VALIDATE $? "starting catalogue" 
+VALIDATE $? "instllling mongodb org shell" 
 
-
-
-mongo --host mongodb.joindevops.online </app/schema/catalogue.js &>>$LOGFILE
+mongo --host mongodb.janadevops.fun </app/schema/catalogue.js &>>$LOGFILE
 VALIDATE $? "loading catalogue data into mongodb"
 
 
