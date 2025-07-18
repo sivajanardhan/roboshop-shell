@@ -43,10 +43,13 @@ else
     echo -e "User roboshop already exists ... $Y SKIPPING $N"
 fi
 
+if [ ! -d /app ]; then
+    mkdir /app &>>$LOGFILE
+    VALIDATE $? "creating app directory"
+else
+    echo -e "/app already exists ... $Y SKIPPING $N"
+fi
 
-
-mkdir /app &>>$LOGFILE
-VALIDATE $? "creating app directory"
 
 curl -L -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip &>>$LOGFILE
 VALIDATE $? "downloading user artifact"
