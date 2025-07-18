@@ -31,38 +31,47 @@ yum install python36 gcc python3-devel -y &>>$LOGFILE
 
 VALIDATE $? "Installing python"
 
-useradd roboshop &>>$LOGFILE
+# useradd roboshop &>>$LOGFILE
 
-mkdir /app  &>>$LOGFILE
+id roboshop &>>$LOGFILE
+if [ $? -ne 0 ]; then
+    useradd roboshop &>>$LOGFILE
+    VALIDATE $? "Creating roboshop user"
+else
+    echo -e "roboshop user already exists ... $Y SKIPPING $N"
+fi
+
+
+# mkdir /app  &>>$LOGFILE
+
+if [ ! -d /app ]; then
+    mkdir /app &>>$LOGFILE
+    VALIDATE $? "Creating /app directory"
+else
+    echo -e "/app directory already exists ... $Y SKIPPING $N"
+fi
+
 
 curl -L -o /tmp/payment.zip https://roboshop-builds.s3.amazonaws.com/payment.zip &>>$LOGFILE
-
 VALIDATE $? "Downloading artifact"
 
 cd /app &>>$LOGFILE
-
 VALIDATE $? "Moving to app directory"
 
 unzip /tmp/payment.zip &>>$LOGFILE
-
 VALIDATE $? "unzip artifact"
 
 pip3.6 install -r requirements.txt &>>$LOGFILE
-
 VALIDATE $? "Installing dependencies"
 
 cp /home/centos/roboshop-shell/payment.service /etc/systemd/system/payment.service &>>$LOGFILE
-
 VALIDATE $? "copying payment service"
 
 systemctl daemon-reload &>>$LOGFILE
-
 VALIDATE $? "daemon-reload"
 
 systemctl enable payment  &>>$LOGFILE
-
 VALIDATE $? "enable payment"
 
 systemctl start payment &>>$LOGFILE
-
 VALIDATE $? "starting payment"
