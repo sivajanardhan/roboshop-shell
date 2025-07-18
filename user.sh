@@ -35,9 +35,15 @@ yum install nodejs -y &>>$LOGFILE
 VALIDATE $? " installing node js "
 
 
+id roboshop &>>$LOGFILE
+if [ $? -ne 0 ]; then
+    useradd roboshop &>>$LOGFILE
+    VALIDATE $? "Adding user roboshop"
+else
+    echo -e "User roboshop already exists ... $Y SKIPPING $N"
+fi
 
-useradd roboshop &>>$LOGFILE
-VALIDATE $? "adding user roboshop"
+
 
 mkdir /app &>>$LOGFILE
 VALIDATE $? "creating app directory"
@@ -79,7 +85,7 @@ VALIDATE $? "Copying mongo repo"
 yum install mongodb-org-shell -y &>>$LOGFILE
 VALIDATE $? "installing mongodb org shell"
 
-mongo --host mongodb.joindevops.online </app/schema/user.js &>>$LOGFILE
+mongo --host mongodb.janadevops.fun </app/schema/user.js &>>$LOGFILE
 VALIDATE $? "loading user data into mongodb"
 
 
