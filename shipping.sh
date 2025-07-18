@@ -30,8 +30,13 @@ VALIDATE(){
 yum install maven -y  &>>$LOGFILE
 VALIDATE $? "Installing Maven"
 
-mkdir /app  &>>$LOGFILE
-VALIDATE $? "creating directory"
+if [ ! -d /app ]; then
+    mkdir /app &>>$LOGFILE
+    VALIDATE $? "Creating /app directory"
+else
+    echo -e "/app already exists ... $Y SKIPPING $N"
+fi
+
 
 curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip   &>>$LOGFILE
 VALIDATE $? "Downloading shipping artifact"
@@ -67,7 +72,7 @@ VALIDATE $? "start shipping service"
 yum install mysql -y  &>>$LOGFILE
 VALIDATE $? "instalng mysql client"
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql  &>>$LOGFILE
+mysql -h mysql.janadevops.fun -uroot -pRoboShop@1 < /app/schema/shipping.sql  &>>$LOGFILE
 VALIDATE $? "Loaded countries and cities info"
 
 
