@@ -30,8 +30,7 @@ VALIDATE(){
 
 
 
-yum install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>>$LOGFILE
-VALIDATE $? "Installing Redis repo"
+
 
 yum module enable redis:remi-6.2 -y &>>$LOGFILE
 VALIDATE $? "enabling redis 6.2 "
